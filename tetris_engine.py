@@ -24,25 +24,25 @@ next_piece = choice(["Q", "I", "S", "Z", "L", "J", "T"]) # O is Q
 
 def get_info(piece):
     if piece == "I":
-        coords = np.array([[0, 3], [0, 4], [0, 5], [0, 6]])
+        coords = np.array([[0, 0], [0, 1], [0, 2], [0, 3]])
         color = [255, 155, 15]
     elif piece == "T":
-        coords = np.array([[1, 3], [1, 4], [1, 5], [0, 4]])
+        coords = np.array([[1, 0], [1, 1], [1, 2], [0, 1]])
         color = [138, 41, 175]
     elif piece == "L":
-        coords = np.array([[1, 3], [1, 4], [1, 5], [0, 5]])
+        coords = np.array([[1, 0], [1, 1], [1, 2], [0, 2]])
         color = [2, 91, 227]
     elif piece == "J":
-        coords = np.array([[1, 3], [1, 4], [1, 5], [0, 3]])
+        coords = np.array([[1, 0], [1, 1], [1, 2], [0, 0]])
         color = [198, 65, 33]
     elif piece == "S":
-        coords = np.array([[1, 5], [1, 4], [0, 3], [0, 4]])
+        coords = np.array([[1, 2], [1, 1], [0, 0], [0, 1]])
         color = [55, 15, 215]
     elif piece == "Z":
-        coords = np.array([[1, 3], [1, 4], [0, 4], [0, 5]])
+        coords = np.array([[1, 0], [1, 1], [0, 1], [0, 2]])
         color = [1, 177, 89]
     else:
-        coords = np.array([[0, 4], [0, 5], [1, 4], [1, 5]])
+        coords = np.array([[0, 1], [0, 2], [1, 1], [1, 2]])
         color = [2, 159, 227]
     
     return coords, color
@@ -118,6 +118,7 @@ if __name__ == "__main__":
             shape_string = input_string_list[0][0]
             shape_position = input_string_list[0][1]
             next_piece = shape_string
+            removed_element = input_string_list.pop(0)
             # next_piece = choice(["I", "T", "L", "J", "Z", "S", "Q"])
 
         if flag > 0:
@@ -129,6 +130,7 @@ if __name__ == "__main__":
            held_info = get_info(held_piece)
         next_info = get_info(next_piece)
         coords, color = get_info(current_piece)
+        coords[:, 1] += int(shape_position) #Modify coords start positions
         if current_piece == "I":
             top_left = [-2, 3]            
         if not np.all(board[coords[:,0], coords[:,1]] == 0):
