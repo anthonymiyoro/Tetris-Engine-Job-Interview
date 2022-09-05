@@ -89,7 +89,19 @@ def display(board, coords, colour, next_info, held_info, score, SPEED):
     return (key)
 
 # Main Loop
-if __name__ == "__main__":
+if __name__ == "__main__": 
+    
+    # print(input_list)
+    file1 = open('inputs.txt', 'r')
+    input_list = file1.readlines()
+
+    for idx, item in enumerate(input_list): # Remove \n
+        if '\n' in item:
+            item = (item.strip())
+            input_list[idx] = item
+
+    print (input_list)
+    
     while not quit:
         # Check if user wants to swap held and current pieces
         if switch:
