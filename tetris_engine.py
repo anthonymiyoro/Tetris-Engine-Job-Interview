@@ -102,7 +102,10 @@ if __name__ == "__main__":
 
     print (input_list)
     
-    while not quit:
+    for input_string in input_list:
+        input_string_list = input_string.split(",")
+    
+    while input_string_list:
         # Check if user wants to swap held and current pieces
         if switch:
             # swap held_piece and current_piece
@@ -112,10 +115,14 @@ if __name__ == "__main__":
         else:
             # Generates the next piece and updates the current piece
             current_piece = next_piece
-            next_piece = choice(["I", "T", "L", "J", "Z", "S", "Q"])
+            shape_string = input_string_list[0][0]
+            shape_position = input_string_list[0][1]
+            next_piece = shape_string
+            # next_piece = choice(["I", "T", "L", "J", "Z", "S", "Q"])
 
         if flag > 0:
             flag -= 1
+        # Determines the color and position of the current, next, and held pieces
         if held_piece == "":
             held_info = np.array([[0, 0]]), [0, 0, 0]
         else:
