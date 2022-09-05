@@ -20,11 +20,11 @@ flag = 0
 score = 0
 
 # All the tetris pieces
-next_piece = choice(["O", "I", "S", "Z", "L", "J", "T"])
+next_piece = choice(["Q", "I", "S", "Z", "L", "J", "T"]) # O is Q
 
 def get_info(piece):
     if piece == "I":
-        coords = np.array([[0, 3], [0, 4], [0, 5], [0, 6]])
+        coords = np.array([[1, 3], [1, 4], [1, 5], [1, 6]])
         color = [255, 155, 15]
     elif piece == "T":
         coords = np.array([[1, 3], [1, 4], [1, 5], [0, 4]])
@@ -100,7 +100,7 @@ if __name__ == "__main__":
         else:
             # Generates the next piece and updates the current piece
             current_piece = next_piece
-            next_piece = choice(["I", "T", "L", "J", "Z", "S", "O"])
+            next_piece = choice(["I", "T", "L", "J", "Z", "S", "Q"])
 
         if flag > 0:
             flag -= 1
@@ -134,7 +134,7 @@ if __name__ == "__main__":
                 # Rotation mechanism
                 # arr is the array of nearby points which get rotated and pov is the indexes of the blocks within arr
                 
-                if current_piece != "I" and current_piece != "O":
+                if current_piece != "I" and current_piece != "Q":
                     if coords[1,1] > 0 and coords[1,1] < 9:
                         arr = coords[1] - 1 + np.array([[[x, y] for y in range(3)] for x in range(3)])
                         pov = coords - coords[1] + 1
@@ -148,7 +148,7 @@ if __name__ == "__main__":
                 
                 # Rotates the array and repositions the piece to where it is now
                 
-                if current_piece != "O":
+                if current_piece != "Q":
                     if key == ord("j"):
                         arr = np.rot90(arr, -1)
                     else:
