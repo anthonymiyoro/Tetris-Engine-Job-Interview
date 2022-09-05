@@ -24,7 +24,7 @@ next_piece = choice(["Q", "I", "S", "Z", "L", "J", "T"]) # O is Q
 
 def get_info(piece):
     if piece == "I":
-        coords = np.array([[1, 3], [1, 4], [1, 5], [1, 6]])
+        coords = np.array([[0, 3], [0, 4], [0, 5], [0, 6]])
         color = [255, 155, 15]
     elif piece == "T":
         coords = np.array([[1, 3], [1, 4], [1, 5], [0, 4]])
@@ -241,11 +241,17 @@ if __name__ == "__main__":
         
         # Clears lines and also counts how many lines have been cleared and updates the score
         lines = 0
+        remaining_lines_with_blocks = 0
                 
-        for line in range(100): # Change height here
+        for line in range(100): # Change height here         
             if np.all([np.any(pos != 0) for pos in board[line]]):
                 lines += 1
                 board[1:line+1] = board[:line]
+                
+            # Count number of remaining lines of blocks
+            if np.any([np.any(pos != 0) for pos in board[line]]):
+                remaining_lines_with_blocks = remaining_lines_with_blocks + 1
+        
                         
         if lines == 1:
             score += 40
@@ -255,6 +261,8 @@ if __name__ == "__main__":
             score += 300
         elif lines == 4:
             score += 1200
+            
+        print ("Remaining Lines with Blocks", remaining_lines_with_blocks)
 
 
                             
