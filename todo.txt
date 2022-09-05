@@ -1,0 +1,10 @@
+- Increase height of Space from 20 to 100
+- Change length of Space to 10
+- Add missing shapes
+- Shapes enter in assigned place
+- Make shapes that enter comes from stdinput
+- Count height of the remaining shapes
+- Turn the code into OOP
+- Remove letter input
+- Remove render display
+- Run tests
