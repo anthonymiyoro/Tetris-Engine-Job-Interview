@@ -272,12 +272,10 @@ if __name__ == "__main__":
                     lines += 1
                     board[1:line+1] = board[:line]
                     
-                # Count number of remaining lines of blocks
-                if np.any([np.any(pos != 0) for pos in board[line]]):
-                    remaining_lines_with_blocks = remaining_lines_with_blocks + 1
-                    
-                print ("Remaining Lines with Blocks Nominal", remaining_lines_with_blocks)
-            
+                # # Count number of remaining lines of blocks
+                # if np.any([np.any(pos != 0) for pos in board[line]]):
+                #     remaining_lines_with_blocks = remaining_lines_with_blocks + 1
+                      
                             
             if lines == 1:
                 score += 40
@@ -287,11 +285,19 @@ if __name__ == "__main__":
                 score += 300
             elif lines == 4:
                 score += 1200
+        
+        for line in range(100): # Change height here         
+            # Count number of remaining lines of blocks
+            if np.any([np.any(pos != 0) for pos in board[line]]):
+                remaining_lines_with_blocks = remaining_lines_with_blocks + 1
                 
-        print ("Remaining Lines with Blocks Final", remaining_lines_with_blocks)
-           
+        print ("Remaining Lines with Blocks Nominal", remaining_lines_with_blocks)
+          
+        # Clear the blocks   
         for unused_var in range(remaining_lines_with_blocks):
-            board[1:line+1] = board[:line]   
+            board[1:line+1] = board[:line] 
+              
+        remaining_lines_with_blocks = 0
                  
         
 

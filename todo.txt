@@ -8,3 +8,8 @@
 - Remove letter input
 - Remove render display
 - Run tests
+- Read file input then pass the shapes to be dropped
+- Fix I shapes
+- Fix starting shape to be from input
+- Make counting done correctly
+- Make drops immediate (Hard Drop "W")
