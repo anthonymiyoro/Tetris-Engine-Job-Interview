@@ -27,7 +27,7 @@ def get_info(piece):
         coords = np.array([[0, 0], [0, 1], [0, 2], [0, 3]])
         color = [255, 155, 15]
     elif piece == "T":
-        coords = np.array([[1, 0], [1, 1], [1, 2], [0, 1]])
+        coords = np.array([[0, 0], [0, 1], [0, 2], [1, 1]])
         color = [138, 41, 175]
     elif piece == "L":
         coords = np.array([[1, 0], [1, 1], [1, 2], [0, 2]])
@@ -35,14 +35,14 @@ def get_info(piece):
     elif piece == "J":
         coords = np.array([[1, 0], [1, 1], [1, 2], [0, 0]])
         color = [198, 65, 33]
-    elif piece == "S":
+    elif piece == "Z":
         coords = np.array([[1, 2], [1, 1], [0, 0], [0, 1]])
         color = [55, 15, 215]
-    elif piece == "Z":
+    elif piece == "S":
         coords = np.array([[1, 0], [1, 1], [0, 1], [0, 2]])
         color = [1, 177, 89]
     else:
-        coords = np.array([[0, 1], [0, 2], [1, 1], [1, 2]])
+        coords = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
         color = [2, 159, 227]
     
     return coords, color
@@ -100,190 +100,203 @@ if __name__ == "__main__":
             item = (item.strip())
             input_list[idx] = item
 
-    print (input_list)
     
     for input_string in input_list:
         input_string_list = input_string.split(",")
-    
-    while input_string_list:
-        # Check if user wants to swap held and current pieces
-        if switch:
-            # swap held_piece and current_piece
-            held_piece, current_piece = current_piece, held_piece
-            switch = False
-            
-        else:
-            # Generates the next piece and updates the current piece
-            current_piece = next_piece
-            shape_string = input_string_list[0][0]
-            shape_position = input_string_list[0][1]
-            next_piece = shape_string
-            removed_element = input_string_list.pop(0)
-            # next_piece = choice(["I", "T", "L", "J", "Z", "S", "Q"])
+        print ("input_string_list", input_string_list)
+        
+           
+        while input_string_list:
+            # Check if user wants to swap held and current pieces
+            if switch:
+                # swap held_piece and current_piece
+                held_piece, current_piece = current_piece, held_piece
+                switch = False
+                
+            else:
+                # Generates the next piece and updates the current piece
+                shape_string = input_string_list[0][0]
+                shape_position = input_string_list[0][1]
+                next_piece = shape_string
+                current_piece = next_piece
+                print ("next_piece", next_piece)
+                removed_element = input_string_list.pop(0)
+                # next_piece = choice(["I", "T", "L", "J", "Z", "S", "Q"])
 
-        if flag > 0:
-            flag -= 1
-        # Determines the color and position of the current, next, and held pieces
-        if held_piece == "":
-            held_info = np.array([[0, 0]]), [0, 0, 0]
-        else:
-           held_info = get_info(held_piece)
-        next_info = get_info(next_piece)
-        coords, color = get_info(current_piece)
-        coords[:, 1] += int(shape_position) #Modify coords start positions
-        if current_piece == "I":
-            top_left = [-2, 3]            
-        if not np.all(board[coords[:,0], coords[:,1]] == 0):
-            break
-        while True:
-            key = display(board, coords, color, next_info, held_info, score, SPEED)
-            dummy = coords.copy() 
-            if key == ord("a"):
-                # Moves the piece left if it isn't against the left wall
-                if np.min(coords[:,1]) > 0:
-                    coords[:,1] -= 1
-                if current_piece == "I":
-                    top_left[1] -= 1
-            elif key == ord("d"):
-                # Moves the piece right if it isn't against the right wall
-                if np.max(coords[:,1]) < 9:
-                    coords[:,1] += 1
-                    if current_piece == "I":
-                        top_left[1] += 1
-                        
-            elif key == ord("j") or key == ord("l"):
-                # Rotation mechanism
-                # arr is the array of nearby points which get rotated and pov is the indexes of the blocks within arr
-                
-                if current_piece != "I" and current_piece != "Q":
-                    if coords[1,1] > 0 and coords[1,1] < 9:
-                        arr = coords[1] - 1 + np.array([[[x, y] for y in range(3)] for x in range(3)])
-                        pov = coords - coords[1] + 1
-                        
-                elif current_piece == "I":
-                    # The straight piece has a 4x4 array, so it needs seperate code
-                    
-                    arr = top_left + np.array([[[x, y] for y in range(4)] for x in range(4)])
-                    pov = np.array([np.where(np.logical_and(arr[:,:,0] == pos[0], arr[:,:,1] == pos[1])) for pos in coords])
-                    pov = np.array([k[0] for k in np.swapaxes(pov, 1, 2)])
-                
-                # Rotates the array and repositions the piece to where it is now
-                
-                if current_piece != "Q":
-                    if key == ord("j"):
-                        arr = np.rot90(arr, -1)
-                    else:
-                        arr = np.rot90(arr)
-                    coords = arr[pov[:,0], pov[:,1]]
-            elif key == ord("w"):
-                # Hard drop set to true
-                drop = True
-            elif key == ord("i"):
-                # Goes out of the loop and tells the program to switch held and current pieces
-                if flag == 0:
-                    if held_piece == "":
-                        held_piece = current_piece
-                    else:
-                        switch = True
-                    flag = 2
-                    break
-            elif key == 8 or key == 27:
-                quit = True
+            if flag > 0:
+                flag -= 1
+            # Determines the color and position of the current, next, and held pieces
+            if held_piece == "":
+                held_info = np.array([[0, 0]]), [0, 0, 0]
+            else:
+                held_info = get_info(held_piece)
+            next_info = get_info(next_piece)
+            coords, color = get_info(current_piece)
+            coords[:, 1] += int(shape_position) #Modify coords start positions
+            if current_piece == "I":
+                top_left = [-2, 3]            
+            if not np.all(board[coords[:,0], coords[:,1]] == 0):
                 break
-            
-            # Checks if the piece is overlapping with other pieces or if it's outside the board, and if so, changes the position to the position before anything happened
-            # CHANGE HEIGHT HERE !!
-            if np.max(coords[:,0]) < 100 and np.min(coords[:,0]) >= 0:
-                if not (current_piece == "I" and (np.max(coords[:,1]) >= 10 or np.min(coords[:,1]) < 0)):
-                    if not np.all(board[coords[:,0], coords[:,1]] == 0):
+            while True:
+                key = display(board, coords, color, next_info, held_info, score, SPEED)
+                dummy = coords.copy() 
+                if key == ord("a"):
+                    # Moves the piece left if it isn't against the left wall
+                    if np.min(coords[:,1]) > 0:
+                        coords[:,1] -= 1
+                    if current_piece == "I":
+                        top_left[1] -= 1
+                elif key == ord("d"):
+                    # Moves the piece right if it isn't against the right wall
+                    if np.max(coords[:,1]) < 9:
+                        coords[:,1] += 1
+                        if current_piece == "I":
+                            top_left[1] += 1
+                            
+                elif key == ord("j") or key == ord("l"):
+                    # Rotation mechanism
+                    # arr is the array of nearby points which get rotated and pov is the indexes of the blocks within arr
+                    
+                    if current_piece != "I" and current_piece != "Q":
+                        if coords[1,1] > 0 and coords[1,1] < 9:
+                            arr = coords[1] - 1 + np.array([[[x, y] for y in range(3)] for x in range(3)])
+                            pov = coords - coords[1] + 1
+                            
+                    elif current_piece == "I":
+                        # The straight piece has a 4x4 array, so it needs seperate code
+                        
+                        arr = top_left + np.array([[[x, y] for y in range(4)] for x in range(4)])
+                        pov = np.array([np.where(np.logical_and(arr[:,:,0] == pos[0], arr[:,:,1] == pos[1])) for pos in coords])
+                        pov = np.array([k[0] for k in np.swapaxes(pov, 1, 2)])
+                    
+                    # Rotates the array and repositions the piece to where it is now
+                    
+                    if current_piece != "Q":
+                        if key == ord("j"):
+                            arr = np.rot90(arr, -1)
+                        else:
+                            arr = np.rot90(arr)
+                        coords = arr[pov[:,0], pov[:,1]]
+                elif key == ord("w"):
+                    # Hard drop set to true
+                    drop = True
+                elif key == ord("i"):
+                    # Goes out of the loop and tells the program to switch held and current pieces
+                    if flag == 0:
+                        if held_piece == "":
+                            held_piece = current_piece
+                        else:
+                            switch = True
+                        flag = 2
+                        break
+                elif key == 8 or key == 27:
+                    quit = True
+                    break
+                
+                # Checks if the piece is overlapping with other pieces or if it's outside the board, and if so, changes the position to the position before anything happened
+                # CHANGE HEIGHT HERE !!
+                if np.max(coords[:,0]) < 100 and np.min(coords[:,0]) >= 0:
+                    if not (current_piece == "I" and (np.max(coords[:,1]) >= 10 or np.min(coords[:,1]) < 0)):
+                        if not np.all(board[coords[:,0], coords[:,1]] == 0):
+                            coords = dummy.copy()
+                    else:
                         coords = dummy.copy()
                 else:
                     coords = dummy.copy()
-            else:
-                coords = dummy.copy()
-                
-            if drop:
-                #Finally, we code the “hard drop.” We use a while loop to check if the piece can move one step down, and stop moving down if it collides with an existing piece or reaches the bottom of the board. 
-                # Every iteration of the loop moves the piece down by 1 and if the piece is resting on the ground or another piece, then it stops and places it
-                
-                while not place:
+                    
+                if drop:
+                    # Finally, we code the “hard drop.” We use a while loop to check if the piece can move one step down, and stop moving down if it collides with an existing piece or reaches the bottom of the board. 
+                    # Every iteration of the loop moves the piece down by 1 and if the piece is resting on the ground or another piece, then it stops and places it
+                    
+                    while not place:
+                        if np.max(coords[:,0]) != 99: # Change height here
+                            # Checks if the piece is resting on something
+                            for pos in coords:
+                                if not np.array_equal(board[pos[0] + 1, pos[1]], [0, 0, 0]):
+                                    place = True
+                                    break
+                        else:
+                            # If the position of the piece is at the ground level, then it places
+                            place = True
+                        
+                        if place:
+                            break
+                        
+                        # Keeps going down and checking when the piece needs to be placed
+                        coords[:,0] += 1
+                        score += 1
+                        if current_piece == "I":
+                            top_left[0] += 1
+                            
+                    drop = False
+                    
+                else:
+                    # If we don’t hard drop, then we just need to check if the piece needs to be placed (i.e. stop moving). A piece is placed when the piece either reaches the bottom of the board or hits another piece.
+
+                    # If none of the above cases apply, we move the piece down by one. 
+                    # Checks if the piece needs to be placed
                     if np.max(coords[:,0]) != 99: # Change height here
-                        # Checks if the piece is resting on something
                         for pos in coords:
                             if not np.array_equal(board[pos[0] + 1, pos[1]], [0, 0, 0]):
                                 place = True
                                 break
                     else:
-                        # If the position of the piece is at the ground level, then it places
                         place = True
                     
-                    if place:
-                        break
-                    
-                    # Keeps going down and checking when the piece needs to be placed
-                    coords[:,0] += 1
-                    score += 1
-                    if current_piece == "I":
-                        top_left[0] += 1
-                        
-                drop = False
-                
-            else:
-                # If we don’t hard drop, then we just need to check if the piece needs to be placed (i.e. stop moving). A piece is placed when the piece either reaches the bottom of the board or hits another piece.
-
-                # If none of the above cases apply, we move the piece down by one. 
-                # Checks if the piece needs to be placed
-                if np.max(coords[:,0]) != 99: # Change height here
+                if place:
+                    # Places the piece where it is on the board
                     for pos in coords:
-                        if not np.array_equal(board[pos[0] + 1, pos[1]], [0, 0, 0]):
-                            place = True
-                            break
-                else:
-                    place = True
-                
-            if place:
-                # Places the piece where it is on the board
-                for pos in coords:
-                    board[tuple(pos)] = color
-                    
-                # Resets place to False
-                place = False
-                break
-
-            # Moves down by 1
-            coords[:,0] += 1
-            if key == ord("s"):
-                score += 1
-            if current_piece == "I":
-                top_left[0] += 1
-                
-        # Finally, for each iteration of the outer while loop, (aka each time a piece is placed,)
-        # we check if any lines were scored and we update the points.
-        
-        # Clears lines and also counts how many lines have been cleared and updates the score
-        lines = 0
-        remaining_lines_with_blocks = 0
-                
-        for line in range(100): # Change height here         
-            if np.all([np.any(pos != 0) for pos in board[line]]):
-                lines += 1
-                board[1:line+1] = board[:line]
-                
-            # Count number of remaining lines of blocks
-            if np.any([np.any(pos != 0) for pos in board[line]]):
-                remaining_lines_with_blocks = remaining_lines_with_blocks + 1
-        
+                        board[tuple(pos)] = color
                         
-        if lines == 1:
-            score += 40
-        elif lines == 2:
-            score += 100
-        elif lines == 3:
-            score += 300
-        elif lines == 4:
-            score += 1200
+                    # Resets place to False
+                    place = False
+                    break
+
+                # Moves down by 1
+                coords[:,0] += 1
+                if key == ord("s"):
+                    score += 1
+                if current_piece == "I":
+                    top_left[0] += 1
+                    
+            # Finally, for each iteration of the outer while loop, (aka each time a piece is placed,)
+            # we check if any lines were scored and we update the points.
             
-        print ("Remaining Lines with Blocks", remaining_lines_with_blocks)
-
-
+            # Clears lines and also counts how many lines have been cleared and how many left
+            # and updates the score every time a block is placed
+            lines = 0
+            remaining_lines_with_blocks = 0
+                    
+            for line in range(100): # Change height here         
+                if np.all([np.any(pos != 0) for pos in board[line]]):
+                    lines += 1
+                    board[1:line+1] = board[:line]
+                    
+                # Count number of remaining lines of blocks
+                if np.any([np.any(pos != 0) for pos in board[line]]):
+                    remaining_lines_with_blocks = remaining_lines_with_blocks + 1
+                    
+                print ("Remaining Lines with Blocks Nominal", remaining_lines_with_blocks)
+            
                             
+            if lines == 1:
+                score += 40
+            elif lines == 2:
+                score += 100
+            elif lines == 3:
+                score += 300
+            elif lines == 4:
+                score += 1200
+                
+        print ("Remaining Lines with Blocks Final", remaining_lines_with_blocks)
+           
+        for unused_var in range(remaining_lines_with_blocks):
+            board[1:line+1] = board[:line]   
+                 
+        
+
+
+
+
+
+                                
