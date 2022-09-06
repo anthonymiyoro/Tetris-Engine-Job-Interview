@@ -205,9 +205,13 @@ if __name__ == "__main__":
           
         # Clear the blocks   
         for unused_var in range(remaining_lines_with_blocks):
-            board[1:line+1] = board[:line] 
+            board[1:line+1] = board[:line]
+            
+        with open("results.txt", "ab") as a:
+            a.write((str(remaining_lines_with_blocks)+ "\n").encode())
               
         remaining_lines_with_blocks = 0
+
                  
         
 
