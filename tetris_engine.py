@@ -1,7 +1,10 @@
+import sys, getopt
 from multiprocessing import dummy
-import cv2
 import numpy as np
 from random import choice
+
+import cv2
+
 
 class TetrisEngine:
     
@@ -73,11 +76,16 @@ class TetrisEngine:
 
 # Main Loop
 if __name__ == "__main__":
+
+    # main
+    input_file= sys.argv[1] 
+    output_file= sys.argv[2]
     
     game = TetrisEngine(101, 10)
     
+    
     # print(input_list)
-    file1 = open('inputs.txt', 'r')
+    file1 = open(input_file, 'r')
     input_list = file1.readlines()
 
     for idx, item in enumerate(input_list): # Remove \n
@@ -208,7 +216,7 @@ if __name__ == "__main__":
         for unused_var in range(remaining_lines_with_blocks):
             game.board[1:line+1] = game.board[:line]
             
-        with open("results.txt", "ab") as a:
+        with open(output_file, "ab") as a:
             a.write((str(remaining_lines_with_blocks)+ "\n").encode())
               
         remaining_lines_with_blocks = 0
