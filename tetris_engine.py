@@ -224,12 +224,3 @@ if __name__ == "__main__":
             a.write((str(remaining_lines_with_blocks)+ "\n").encode())
               
         remaining_lines_with_blocks = 0
-
-                 
-        
-
-
-
-
-
-                                
