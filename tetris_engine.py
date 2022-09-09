@@ -35,7 +35,7 @@ class TetrisEngine:
         
 
     # All the tetris pieces
-    next_piece = choice(["Q", "I", "S", "Z", "L", "J", "T"]) # O is Q
+    next_piece = choice(["Q", "I", "S", "Z", "L", "J", "T"]) 
 
     def get_info(self, piece):
         if piece == "I":
@@ -64,21 +64,21 @@ class TetrisEngine:
     def display(self, board, coords, colour, next_info, held_info, SPEED):
         
         # Draw the board
-        border = np.uint8(127 - np.zeros([101, 1, 3])) # drawn height? # Change height here
+        border = np.uint8(127 - np.zeros([101, 1, 3])) # drawn height? 
         border_ = np.uint8(127 - np.zeros([1, 34, 3])) # drawn width?
         
         dummy = board.copy()
         dummy[coords[:,0], coords[:,1]] = colour
         
-        right = np.uint8(np.zeros([101, 10, 3])) # Right border # Change height here
+        right = np.uint8(np.zeros([101, 10, 3])) # Right border 
         right[next_info[0][:,0] + 2, next_info[0][:,1]] = next_info[1]
-        left = np.uint8(np.zeros([101, 10, 3])) # Left border # Change height here
+        left = np.uint8(np.zeros([101, 10, 3])) # Left border 
         left[held_info[0][:,0] + 2, held_info[0][:,1]] = held_info[1]
         
         dummy = np.concatenate((border, left, border, dummy, border, right, border), 1)
         dummy = np.concatenate((border_, dummy, border_), 0)
         
-        dummy = dummy.repeat(101, 0).repeat(101, 1) # Change height here
+        dummy = dummy.repeat(101, 0).repeat(101, 1) 
         key = cv2.waitKey(int(1000/SPEED))
         
         return (key)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
         input_string_list = input_string.split(",")
 
         while input_string_list:     
-            # Generates the next piece and updates the current piece
+            # Loop through each shape and collect both shape and position
             shape_string = input_string_list[0][0]
             shape_position = input_string_list[0][1]
             next_piece = shape_string
@@ -124,7 +124,7 @@ if __name__ == "__main__":
                 game.held_info = game.get_info(game.held_piece)
             next_info = game.get_info(next_piece)
             coords, color = game.get_info(current_piece)
-            coords[:, 1] += int(shape_position) #Modify coords start positions
+            coords[:, 1] += int(shape_position) 
             if current_piece == "I":
                 top_left = [-2, 3]            
             if not np.all(game.board[coords[:,0], coords[:,1]] == 0):
@@ -133,7 +133,7 @@ if __name__ == "__main__":
                 key = game.display(game.board, coords, color, next_info, game.held_info, game.SPEED)
                 dummy = coords.copy() 
                 # Checks if the piece is overlapping with other pieces or if it's outside the board, and if so, changes the position to the position before anything happened
-                # CHANGE HEIGHT HERE !!
+                
                 if np.max(coords[:,0]) < 101 and np.min(coords[:,0]) >= 0:
                     if not (current_piece == "I" and (np.max(coords[:,1]) >= 10 or np.min(coords[:,1]) < 0)):
                         if not np.all(game.board[coords[:,0], coords[:,1]] == 0):
@@ -144,11 +144,11 @@ if __name__ == "__main__":
                     coords = dummy.copy()
                     
                 if drop:
-                    # Finally, we code the “hard drop.” We use a while loop to check if the piece can move one step down, and stop moving down if it collides with an existing piece or reaches the bottom of the board. 
-                    # Every iteration of the loop moves the piece down by 1 and if the piece is resting on the ground or another piece, then it stops and places it
+                    # Finally, we code the “hard drop.” We use a while loop to check if the piece can move one step down, and stop moving down if it collides with an existing piece or
+                    # reaches the bottom of the board. 
                     
                     while not game.place:
-                        if np.max(coords[:,0]) != 100: # Change height here
+                        if np.max(coords[:,0]) != 100: 
                             # Checks if the piece is resting on something
                             for pos in coords:
                                 if not np.array_equal(game.board[pos[0] + 1, pos[1]], [0, 0, 0]):
@@ -173,7 +173,7 @@ if __name__ == "__main__":
 
                     # If none of the above cases apply, we move the piece down by one. 
                     # Checks if the piece needs to be placed
-                    if np.max(coords[:,0]) != 100: # Change height here
+                    if np.max(coords[:,0]) != 100:
                         for pos in coords:
                             if not np.array_equal(game.board[pos[0] + 1, pos[1]], [0, 0, 0]):
                                 game.place = True
@@ -204,13 +204,13 @@ if __name__ == "__main__":
             remaining_lines_with_blocks = 0
                     
             # Clear blocks now that a line is full        
-            for line in range(101): # Change height here         
+            for line in range(101):       
                 if np.all([np.any(pos != 0) for pos in game.board[line]]):
                     lines += 1
                     game.board[1:line+1] = game.board[:line]
 
         
-        for line in range(101): # Change height here         
+        for line in range(101):      
             # Count number of remaining lines of blocks
             if np.any([np.any(pos != 0) for pos in game.board[line]]):
                 remaining_lines_with_blocks = remaining_lines_with_blocks + 1
