@@ -1,6 +1,7 @@
-import sys, getopt
-from multiprocessing import dummy
+import sys
+
 import numpy as np
+from multiprocessing import dummy
 from random import choice
 
 import cv2

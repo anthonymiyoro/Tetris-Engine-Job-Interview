@@ -13,3 +13,5 @@
 - Fix starting shape to be from input
 - Make counting done correctly
 - Make drops immediate (Hard Drop "W")
+- Remove unnecesary buttons
+- Remove drawing functionality
