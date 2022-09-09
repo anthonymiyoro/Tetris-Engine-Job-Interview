@@ -5,11 +5,21 @@ from random import choice
 
 import cv2
 
+""" 
+This module is a tetris game engine in which a .txt file with the sequence and position of 
+tetris shapes is accepted as input and a .txt file with the number of lines remaining at the 
+end of the game is produced as output.
+
+Shapes start from the left-most part of the games' grid.
+    
+Expected Input:
+    $ python3 tetris_engine.py <input.txt> output.txt
+
+Returns:
+    .txt: Each line containing the number of remaining lines for each line of the input file.
+"""
 
 class TetrisEngine:
-    
-    #img = np.zeros([height, width, 3], dtype=np.uint8)
-    # board = np.uint8(np.zeros([100,10,3])) # Define the board
 
     # Initialize some variables
     def __init__(self, height, width):
@@ -53,7 +63,7 @@ class TetrisEngine:
 
     def display(self, board, coords, colour, next_info, held_info, SPEED):
         
-        # Draw the display
+        # Draw the board
         border = np.uint8(127 - np.zeros([101, 1, 3])) # drawn height? # Change height here
         border_ = np.uint8(127 - np.zeros([1, 34, 3])) # drawn width?
         
@@ -83,11 +93,11 @@ if __name__ == "__main__":
     game = TetrisEngine(101, 10)
     
     
-    # print(input_list)
+    # Read input file, loop through each line of input extracting each shapes position
     file1 = open(input_file, 'r')
     input_list = file1.readlines()
 
-    for idx, item in enumerate(input_list): # Remove \n
+    for idx, item in enumerate(input_list): 
         if '\n' in item:
             item = (item.strip())
             input_list[idx] = item
@@ -95,18 +105,14 @@ if __name__ == "__main__":
     
     for input_string in input_list:
         input_string_list = input_string.split(",")
-        print ("input_string_list", input_string_list)
-        
-           
+
         while input_string_list:     
             # Generates the next piece and updates the current piece
             shape_string = input_string_list[0][0]
             shape_position = input_string_list[0][1]
             next_piece = shape_string
             current_piece = next_piece
-            print ("next_piece", next_piece)
             removed_element = input_string_list.pop(0)
-            # next_piece = choice(["I", "T", "L", "J", "Z", "S", "Q"])
             drop = True
 
             if game.flag > 0:
@@ -209,9 +215,8 @@ if __name__ == "__main__":
             if np.any([np.any(pos != 0) for pos in game.board[line]]):
                 remaining_lines_with_blocks = remaining_lines_with_blocks + 1
                 
-        print ("Remaining Lines with Blocks Nominal", remaining_lines_with_blocks)
           
-        # Clear the blocks   
+        # Clear the blocks and write output
         for unused_var in range(remaining_lines_with_blocks):
             game.board[1:line+1] = game.board[:line]
             
